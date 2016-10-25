@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+/*
+**    $base-font-size 只接受像素值。
+**    $base-line-height 接受像素值和rem值。
+**    vertical-rhythm 的第一个参数接受像素值和rem值，当$use-height为 true 时，用于设置元素的高度。
+**    应用 vertical-rhythm 来设置高度的元素，其box-sizing 必须为border-box，否则其border可能破坏垂直韵律。
+**    示例用法：
+**    @import 'vertical_rhythm';
+**    $base-font-size: 16px;
+**    $base-line-height: 1.5rem;
+**    @include establish_rhythm(true);
+
+**    h2 {
+**      @include vertical-rhythm(2.23rem, $bottom-rows: 0);
+**    }
+*/
+
+$base-font-size: 16px !default;
+$base-line-height: 1.5rem !default;
+
+@function rem($font-size: $base-font-size) {
+  @if unit($font-size) == "rem" {
+    @return $font-size;
+  } @else {
+    @return ($font-size / $base-font-size) * 1rem;
+  }
+}
+
+@mixin vertical-rhythm($font-size, $bottom-rows: 0, $top-rows: 0, $use-height: false, $border: 0rem) {
+  $font-size: rem($font-size);
+  $border: rem($border);
+  $base-line-height: rem($base-line-height);
+  $multiplier: ceil($font-size / $base-line-height);
+
+  @if $use-height {
+    $leftover: $base-line-height * $multiplier - $font-size;
+    box-sizing: border-box;
+    height: $font-size;
+    margin-top: $base-line-height * $top-rows;
+    margin-bottom: $base-line-height * $bottom-rows + $leftover;
+  } @else {
+    font-size: $font-size;
+    line-height: $base-line-height * $multiplier;
+    margin-top: $base-line-height * $top-rows;
+    margin-bottom: $base-line-height * $bottom-rows - $border;
+  }
+}
+
+@mixin establish_rhythm($debug: false) {
+  $line-height-ratio: rem($base-line-height) / 1rem;
+  html {
+    font-size: $base-font-size !important;
+    line-height: $line-height-ratio !important;
+    @if $debug {
+      background-image: -webkit-linear-gradient(bottom,rgba(0,0,0,.5) 5%,transparent 0);
+      background-image: linear-gradient(to top,rgba(0,0,0,.5) 5%,transparent 0);
+      background-size: 100% $line-height-ratio * 1em;
+      background-position: left top;
+    }
+  }
+}
