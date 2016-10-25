@@ -49,3 +49,4 @@ npm-debug.log
 *.css.map
 builds/
 workspace.xml
+vcs.xml
