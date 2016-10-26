@@ -50,5 +50,6 @@ npm-debug.log
 builds/
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/vcs.xml
 .iws
 web/resources/WEB-INF/classes/
