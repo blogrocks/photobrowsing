@@ -43,6 +43,7 @@ Temporary Items
 node_modules/
 npm-debug.log
 *.js.map
+
 *-compiled.js
 .DS_Store
 *.css
@@ -51,5 +52,10 @@ builds/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/vcs.xml
+.idea/jsLibraryMappings.xml
+.idea/watcherTasks.xml
 .iws
 web/resources/WEB-INF/classes/
+.idea/jsLibraryMappings.xml
+.idea/watcherTasks.xml
+web/src/Components/Game/game.scss

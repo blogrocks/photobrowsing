@@ -16,7 +16,7 @@ var plugins = [
         children:  true, // Look for common dependencies in all children,
         minChunks: 2, // How many times a dependency must come up before being extracted
     }),
-    new ExtractTextPlugin("stylesheets/styles.css")
+    new ExtractTextPlugin("stylesheets/styles.css", {allChunks: true})
 ];
 
 if (!production) {
@@ -85,9 +85,12 @@ if (!production) {
 }
 module.exports = {
     // context: __dirname + "/src",
-    entry: ["babel-polyfill", "./src/app.js"],
+    entry: [
+        'webpack-dev-server/client?http://localhost:9090',
+        'webpack/hot/only-dev-server', "babel-polyfill",
+        "./src/app.js"],
     output: {
-        path: 'resources/builds',
+        path: path.join(__dirname, 'resources/builds'),
         filename: "bundle.js",
         chunkFilename: '[name]-[chunkhash].js',
         publicPath: 'builds/'
@@ -105,11 +108,7 @@ module.exports = {
             {
                 test: [/\.js$/, /\.es6$/],
                 exclude: /node_modules/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['react', 'es2015', "stage-0"],
-                    plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
-                }
+                loaders: ['react-hot', 'babel-loader']
             },
             // { // This loader is commented out because we are using extract text plugin down below.
             //     test: [/\.scss/, /\.css/],

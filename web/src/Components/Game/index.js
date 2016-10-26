@@ -4,6 +4,7 @@
 import React from 'react';
 import Board from 'Components/Board';
 import Button from 'Components/Button';
+import './game.scss';
 
 export default class Game extends React.Component {
     constructor() {
