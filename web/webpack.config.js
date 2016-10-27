@@ -18,8 +18,13 @@ var plugins = [
     }),
     new ExtractTextPlugin("stylesheets/styles.css", {allChunks: true})
 ];
+var hotLoadEntries = [];
 
 if (!production) {
+    hotLoadEntries = [
+        'webpack-dev-server/client?http://localhost:9090',
+        'webpack/hot/only-dev-server'
+    ];
     plugins.push(
         new WebpackBrowserPlugin({
             port: 9090,
@@ -86,8 +91,7 @@ if (!production) {
 module.exports = {
     // context: __dirname + "/src",
     entry: [
-        'webpack-dev-server/client?http://localhost:9090',
-        'webpack/hot/only-dev-server', "babel-polyfill",
+        ...hotLoadEntries, "babel-polyfill",
         "./src/app.js"],
     output: {
         path: path.join(__dirname, 'resources/builds'),
