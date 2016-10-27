@@ -132,13 +132,20 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader", "postcss-loader")
             },
             {
                 test: /\.scss$/i,
-                loader: ExtractTextPlugin.extract(['css','sass'])
+                loader: ExtractTextPlugin.extract(['css','postcss-loader', 'sass'])
             },
         ]
+    },
+    postcss: function () {
+        return [
+            require('postcss-smart-import')({ /* ...options */ }),
+            require('precss')({ /* ...options */ }),
+            require('autoprefixer')({ /* ...options */ })
+        ];
     },
     sassLoader: {
         includePaths: [
