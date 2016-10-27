@@ -114,10 +114,6 @@ module.exports = {
                 exclude: /node_modules/,
                 loaders: ['react-hot', 'babel-loader']
             },
-            // { // This loader is commented out because we are using extract text plugin down below.
-            //     test: [/\.scss/, /\.css/],
-            //     loader: 'style!css!sass',
-            // },
             {
                 test: /\.less$/,
                 loader: "style!css!less"
@@ -131,12 +127,8 @@ module.exports = {
                 loader: 'url?limit=10000',
             },
             {
-                test: /\.css$/,
-                loader: ExtractTextPlugin.extract("style-loader", "css-loader", "postcss-loader")
-            },
-            {
-                test: /\.scss$/i,
-                loader: ExtractTextPlugin.extract(['css','postcss-loader', 'sass'])
+                test: [/\.css$/, /\.scss$/i],
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader?sourceMap!postcss-loader!sass-loader?outputStyle=expanded&sourceMap=true&sourceMapContents=true")
             },
         ]
     },
