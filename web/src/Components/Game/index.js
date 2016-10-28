@@ -2,7 +2,7 @@
  * Created by zhengquanbai on 16/10/24.
  */
 import React from 'react';
-import Board from 'Components/Board';
+import Board from './Board';
 import Button from 'Components/Button';
 import './game.scss';
 

@@ -2,7 +2,7 @@
  * Created by zhengquanbai on 16/10/24.
  */
 import React from 'react';
-import Square from 'Components/Square';
+import Square from './Square';
 
 export default class extends React.Component {
     renderSquare(i) {
