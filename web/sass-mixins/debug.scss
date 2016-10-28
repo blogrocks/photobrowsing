@@ -1,0 +1,7 @@
+$show-debug-border: true;
+
+@mixin debug-border($color: black) {
+  @if ($show-debug-border == true) {
+    border: 1px solid $color;
+  }
+}

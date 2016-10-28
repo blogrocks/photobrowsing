@@ -1,3 +1,7 @@
+@import 'debug.scss';
+
+$show-debug-border: false;
 body {
-  background: orange;
+  background: lightyellow;
+  @include debug-border;
 }
