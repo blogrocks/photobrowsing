@@ -58,4 +58,4 @@ builds/
 web/resources/WEB-INF/classes/
 .idea/jsLibraryMappings.xml
 .idea/watcherTasks.xml
-web/src/Components/Game/game.scss
+.sass-cache/
