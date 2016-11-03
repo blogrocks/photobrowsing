@@ -5,3 +5,74 @@ body {
   background: lightyellow;
   @include debug-border;
 }
+
+ol, ul {
+  padding-left: 30px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 40px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 40px;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game {
+  width: 60%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+  a {
+    text-decoration: none;
+  }
+}
+
+.toggle-btn {
+  margin-left: 120px;
+}
+
+.status {
+  float: left;
+  margin-top: 5px;
+}
+.rules {
+  width: 60%;
+  margin: auto;
+  p {
+    font-weight: normal;
+  }
+}
+
+.title {
+  text-align: center;
+}
