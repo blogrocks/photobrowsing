@@ -142,6 +142,7 @@ module.exports = {
     sassLoader: {
         includePaths: [
             path.resolve(__dirname, "./node_modules/compass-mixins/lib"),
+            path.resolve(__dirname, "./node_modules/normalize-scss/sass"),
             path.resolve(__dirname, "./sass-mixins")
         ]
     },
