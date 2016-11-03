@@ -5,6 +5,9 @@ body {
   background: lightyellow;
   @include debug-border;
 }
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+}
 
 ol, ul {
   padding-left: 30px;
