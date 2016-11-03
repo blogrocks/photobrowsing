@@ -8,7 +8,7 @@ sass_dir = "./"
 images_dir = "images"
 javascripts_dir = "javascripts"
 add_import_path __dir__ + "/sass-mixins"
-
+additional_import_paths = [__dir__ + "/node_modules/normalize-scss/sass"]
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed
 
