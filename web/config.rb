@@ -5,7 +5,8 @@ require 'compass/import-once/activate'
 http_path = "/"
 css_dir = "./"
 sass_dir = "./"
-images_dir = "images"
+images_path = __dir__ + "/resources/img/"
+generated_images_path = __dir__ + "/resources/img"
 javascripts_dir = "javascripts"
 add_import_path __dir__ + "/sass-mixins"
 additional_import_paths = [__dir__ + "/node_modules/normalize-scss/sass"]
