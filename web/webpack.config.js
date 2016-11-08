@@ -116,7 +116,7 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                loader: "style!css!less"
+                loader: "style!css?sourceMap!postcss-loader!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true"
             },
             {
                 test: /\.html/,
