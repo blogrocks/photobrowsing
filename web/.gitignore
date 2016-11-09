@@ -47,6 +47,7 @@ npm-debug.log
 *-compiled.js
 .DS_Store
 *.css
+/sprites/
 !*sprite.css
 *.css.map
 builds/
