@@ -6,7 +6,7 @@ http_path = "/"
 css_dir = "./"
 sass_dir = "./"
 images_path = __dir__ + "/resources/img/"
-generated_images_path = __dir__ + "/resources/img"
+generated_images_path = __dir__ + "/resources/images"
 javascripts_dir = "javascripts"
 add_import_path __dir__ + "/sass-mixins"
 additional_import_paths = [__dir__ + "/node_modules/normalize-scss/sass"]
