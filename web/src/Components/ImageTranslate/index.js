@@ -11,7 +11,6 @@ class ImageTranslate extends React.Component {
   render() {
     return (
         <div class="image-container">
-          <img src={image3} alt=""/>
           <img src={image1} alt=""/>
           <img src={image2} alt=""/>
         </div>

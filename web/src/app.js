@@ -6,4 +6,3 @@ import ImageTranslate from 'Components/ImageTranslate';
 import 'include_in_entry';
 
 render(<ImageTranslate />, document.getElementById('anchor'));
-
