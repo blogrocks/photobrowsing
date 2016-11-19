@@ -10,16 +10,17 @@ $show-debug-border: false;
   overflow: hidden;
   img {
     width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
     transition-duration: .8s;
     transition-property: left, top;
+    &:first-of-type {
+      position: static;
+    }
   }
-  img:nth-of-type(2) {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  &:hover img:nth-of-type(2) {
-    left: 100%;
+  img.goAway {
     top: 100%;
+    left: 100%;
   }
 }
