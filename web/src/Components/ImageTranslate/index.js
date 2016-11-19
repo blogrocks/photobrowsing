@@ -26,13 +26,19 @@ class ImageTranslate extends React.Component {
         let newImageGroup = this._generateImageGroup(),
             lastImage = images[images.length - 1];
 
-        newImageGroup.pop();
-        newImageGroup.push(<img src={lastImage} key={lastImage} class="goAway" />);
         this.setState({
           data: newImageGroup
         });
-        images.unshift(images.pop());
-      }, 2000);
+        setTimeout(() => {
+          newImageGroup.pop();
+          newImageGroup.push(<img src={lastImage} key={lastImage} class="goAway" />);
+          this.setState({
+            data: newImageGroup
+          });
+          images.unshift(images.pop());
+        }, 100);
+
+      }, 2500);
     }, 0);
   }
 

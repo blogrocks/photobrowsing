@@ -4,7 +4,7 @@ $show-debug-border: false;
 
 .image-container {
   @include debug-border;
-  width: 50%;
+  width: 60%;
   margin: 50px auto;
   position: relative;
   overflow: hidden;
@@ -13,7 +13,7 @@ $show-debug-border: false;
     position: absolute;
     left: 0;
     top: 0;
-    transition-duration: .8s;
+    transition-duration: 1s;
     transition-property: left, top;
     &:first-of-type {
       position: static;
