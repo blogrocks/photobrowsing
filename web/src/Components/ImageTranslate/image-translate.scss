@@ -2,10 +2,15 @@
 
 $show-debug-border: false;
 
+.image-slider {
+  @include debug-border(blue);
+  width: 60%;
+  margin: 0 auto;
+}
 .image-container {
   @include debug-border;
-  width: 60%;
-  margin: 50px auto;
+  width: 100%;
+  margin: 50px auto 20px;
   position: relative;
   overflow: hidden;
   img {
@@ -23,4 +28,8 @@ $show-debug-border: false;
     top: 100%;
     left: 100%;
   }
+}
+
+.btn-area {
+  text-align: center;
 }
