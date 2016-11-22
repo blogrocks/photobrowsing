@@ -8,9 +8,11 @@ import image1 from './images/1.jpg';
 import image2 from './images/2.jpg';
 import image3 from './images/3.jpg';
 import image4 from './images/4.jpg';
+import image5 from './images/hboy3.jpg';
+import image6 from './images/hboy4.jpg';
 import './image-translate.scss';
 
-let images = [image1, image2, image3, image4];
+let images = [];
 
 class ImageTranslate extends React.Component {
   constructor(props) {
@@ -22,8 +24,11 @@ class ImageTranslate extends React.Component {
   }
 
   _generateImageGroup() {
+    let imageNumber = images.length;
     return images.map((image, index) => {
-      return <img src={image} key={image} />;
+      let imageClass = (index != imageNumber - 1) ? 'hidden' : '';
+
+      return <img src={image} key={image} class={imageClass} />;
     });
   }
 
@@ -32,29 +37,41 @@ class ImageTranslate extends React.Component {
       this.setState({     // 将 setState 放在 setTimeout 里，确保其同步性。
         data: this._generateImageGroup()
       });
-      this.startSliding();
+      this.scheduleAnimating();
     }, 0);
   }
 
-  startSliding(interval = 2500) {
-    this.timer =
-        setInterval(() => {
-          let newImageGroup = this._generateImageGroup(),
-              lastImage = images[images.length - 1];
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
 
-          this.setState({
-            data: newImageGroup
-          });
-          setTimeout(() => { // 稍等片刻，确保 dom 更新完成。
-            newImageGroup.pop();
-            newImageGroup.push(<img src={lastImage} key={lastImage} class="goAway" />);
-            this.setState({
-              data: newImageGroup
-            });
-            images.unshift(images.pop());
-          }, 100);
+  scheduleAnimating(interval = 4000) {
+    if (interval < 4000) interval = 4000;
+    this.switchPhoto();
+    this.timer = setInterval(() => {
+      this.switchPhoto();
+    }, interval);
+  }
 
-        }, interval);
+  switchPhoto() {
+    if (!(images && images.length)) return;
+    let newImageGroup = this._generateImageGroup(),
+        lastImage = images[images.length - 1],
+        secondToLastImage = images[images.length - 2];
+
+    this.setState({
+      data: newImageGroup
+    });
+    setTimeout(() => { // 停留2s，图片观看时间
+      newImageGroup.pop();
+      newImageGroup.pop();
+      newImageGroup.push(<img src={secondToLastImage} key={secondToLastImage} />);
+      newImageGroup.push(<img src={lastImage} key={lastImage} class="hidden" />);
+      this.setState({
+        data: newImageGroup
+      });
+      images.unshift(images.pop());
+    }, 2000);
   }
 
   handleButtonClick = (e) => {
@@ -68,21 +85,26 @@ class ImageTranslate extends React.Component {
     this.setState({playing: !this.state.playing});
   };
 
-  handleFileAdded = (e) => {
-
+  handleFileAdded = (files) => {
+    if (files) {
+      files.forEach((file) => {
+        images.unshift(window.URL.createObjectURL(file));
+      });
+    }
   };
+
   render() {
     return (
         <div class="image-slider">
-          <div class="image-container">
-            {this.state.data}
-          </div>
           <div class="btn-area">
             <Button onClick={this.handleButtonClick}>
               {this.state.playing ? '暂停' : '播放'}
             </Button>
           </div>
-          <FileInput onChange={() => {this.handleFileAdded()}} />
+          <FileInput onChange={(files) => {this.handleFileAdded(files)}} />
+          <div class="image-container">
+            {this.state.data}
+          </div>
         </div>
     );
   }

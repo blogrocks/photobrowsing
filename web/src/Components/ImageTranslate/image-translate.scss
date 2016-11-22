@@ -12,21 +12,20 @@ $show-debug-border: false;
   width: 100%;
   margin: 50px auto 20px;
   position: relative;
-  overflow: hidden;
+  //overflow: hidden;
   img {
     width: 100%;
     position: absolute;
     left: 0;
     top: 0;
-    transition-duration: 1s;
-    transition-property: left, top;
+    transition-duration: 2s;
+    transition-property: left, top, opacity;
     &:first-of-type {
       position: static;
     }
   }
-  img.goAway {
-    top: 100%;
-    left: 100%;
+  img.hidden {
+    opacity: 0;
   }
 }
 
