@@ -47,13 +47,13 @@ class ImageTranslate extends React.Component {
 
   scheduleAnimating(interval = 4000) {
     if (interval < 4000) interval = 4000;
-    this.switchPhoto();
+    this._switchPhoto();
     this.timer = setInterval(() => {
-      this.switchPhoto();
+      this._switchPhoto();
     }, interval);
   }
 
-  switchPhoto() {
+  _switchPhoto() {
     if (!(images && images.length)) return;
     let newImageGroup = this._generateImageGroup(),
         lastImage = images[images.length - 1],
@@ -79,7 +79,7 @@ class ImageTranslate extends React.Component {
       clearInterval(this.timer);
       this.timer = null;
     } else {
-      this.startSliding();
+      this.scheduleAnimating();
     }
 
     this.setState({playing: !this.state.playing});
