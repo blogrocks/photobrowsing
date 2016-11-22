@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import Button from 'Components/Button';
+import FileInput from 'Components/FileInput';
 import image1 from './images/1.jpg';
 import image2 from './images/2.jpg';
 import image3 from './images/3.jpg';
@@ -56,7 +57,7 @@ class ImageTranslate extends React.Component {
         }, interval);
   }
 
-  handleButtonClick = () => {
+  handleButtonClick = (e) => {
     if (this.timer != null) {
       clearInterval(this.timer);
       this.timer = null;
@@ -67,6 +68,9 @@ class ImageTranslate extends React.Component {
     this.setState({playing: !this.state.playing});
   };
 
+  handleFileAdded = (e) => {
+
+  };
   render() {
     return (
         <div class="image-slider">
@@ -78,7 +82,7 @@ class ImageTranslate extends React.Component {
               {this.state.playing ? '暂停' : '播放'}
             </Button>
           </div>
-          <input type="file" multiple="multiple" style={{padding: '10px'}}/>
+          <FileInput onChange={() => {this.handleFileAdded()}} />
         </div>
     );
   }
