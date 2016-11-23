@@ -28,6 +28,7 @@ $show-debug-border: false;
   }
   .galleryContainer {
     display: flex;
+    flex-direction: row;
     padding: 0 20px;
   }
 }

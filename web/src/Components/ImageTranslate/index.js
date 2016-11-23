@@ -111,8 +111,10 @@ class ImageTranslate extends React.Component {
 
     return (
         <div class="image-slider">
-          {imageSelector}
-          {controlButton}
+          <div class="control-header">
+            {imageSelector}
+            {controlButton}
+          </div>
           <div class="image-container">
             {this.state.images}
           </div>

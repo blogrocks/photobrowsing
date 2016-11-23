@@ -5,9 +5,15 @@ $show-debug-border: false;
 .image-slider {
   @include debug-border(blue);
   width: 60%;
-  margin: 0 auto;
+  margin: 5px auto;
   background: #f1e5e6;
   min-height: 200px;
+  .control-header {
+    display: flex;
+    .btn-area {
+      flex: 1
+    }
+  }
 }
 .image-container {
   @include debug-border;
