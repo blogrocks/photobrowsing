@@ -3,6 +3,7 @@ import './fileinput.scss';
 class FileInput extends React.Component {
   constructor(props) {
     super(props);
+    this.existingPhotos = {};
     this.state = {
       labelVal: '添加图片',
       inputDisabled: false,
@@ -17,7 +18,10 @@ class FileInput extends React.Component {
 
     imageFiles = Array.from(selectedFiles).filter((file) => {
       var imageType = /^image\//;
-      return imageType.test(file.type);
+
+      if (!imageType.test(file.type) || this.existingPhotos[file.name + '']) return false;
+      this.existingPhotos[file.name + ''] = true;
+      return true;
     });
     toDisplay = "添加了 " + imageFiles.length + " 张图片";
 
