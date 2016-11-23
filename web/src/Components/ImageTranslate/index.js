@@ -47,14 +47,17 @@ class ImageTranslate extends React.Component {
   _switchPhoto() {
     let sources = this.sources;
 
-    if (!(sources && sources.length)) return;
-    let newImageGroup = this._generateImageGroup(sources),
-        lastImageSrc = sources[sources.length - 1],
-        secondToLastImageSrc = sources[sources.length - 2];
+    if (!(sources && sources.length)) return; // 无图片
+    let newImageGroup = this._generateImageGroup(sources);
 
     this.setState({
       images: newImageGroup
     });
+
+    if (sources.length < 2) return; // 一张图片，无需切换
+
+    let lastImageSrc = sources[sources.length - 1],
+        secondToLastImageSrc = sources[sources.length - 2];
     setTimeout(() => { // 停留2s，图片观看时间
       newImageGroup.pop();
       newImageGroup.pop();
