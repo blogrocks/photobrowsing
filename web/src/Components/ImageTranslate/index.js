@@ -86,7 +86,6 @@ class ImageTranslate extends React.Component {
   };
 
   handleFileAdded = (files) => {
-      alert(this.props.hello);
     if (files) {
       files.forEach((file) => {
         this.sources.unshift(window.URL.createObjectURL(file));
