@@ -10,9 +10,8 @@ $show-debug-border: false;
 .image-container {
   @include debug-border;
   width: 100%;
-  margin: 50px auto 20px;
+  margin: 10px auto 30px;
   position: relative;
-  //overflow: hidden;
   img {
     width: 100%;
     position: absolute;

@@ -4,15 +4,8 @@
 import React from 'react';
 import Button from 'Components/Button';
 import FileInput from 'Components/FileInput';
-import image1 from './images/1.jpg';
-import image2 from './images/2.jpg';
-import image3 from './images/3.jpg';
-import image4 from './images/4.jpg';
-import image5 from './images/hboy3.jpg';
-import image6 from './images/hboy4.jpg';
+import SpaceHolder from 'Components/SpaceHolder';
 import './image-translate.scss';
-
-let images = [];
 
 class ImageTranslate extends React.Component {
   constructor(props) {
@@ -96,12 +89,16 @@ class ImageTranslate extends React.Component {
   render() {
     return (
         <div class="image-slider">
+          {
+              this.props.photoAddingAllowed ?
+                  <FileInput onChange={(files) => {this.handleFileAdded(files)}} /> : null
+          }
+          <SpaceHolder height="2px"/>
           <div class="btn-area">
             <Button onClick={this.handleButtonClick}>
               {this.state.playing ? '暂停' : '播放'}
             </Button>
           </div>
-          <FileInput onChange={(files) => {this.handleFileAdded(files)}} />
           <div class="image-container">
             {this.state.images}
           </div>
@@ -110,5 +107,8 @@ class ImageTranslate extends React.Component {
   }
 }
 
+ImageTranslate.defaultProps = {
+  photoAddingAllowed: false
+};
 
 export default ImageTranslate;
