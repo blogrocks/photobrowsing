@@ -52,7 +52,7 @@ class ImageTranslateContainer extends React.Component {
         return (
             <div class="container">
                 <a class="newgallary" onClick={() => this.createGallery()}>
-                    <span>点此创建新影集</span>
+                    <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>
                 {this.calcRows(this.state.galleries)}
             </div>
