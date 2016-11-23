@@ -4,10 +4,10 @@ $show-debug-border: false;
 
 .image-slider {
   @include debug-border(blue);
-  width: 60%;
-  margin: 5px auto;
-  background: #f1e5e6;
+  background: #f7f9fc;
+  width: 400px;
   min-height: 200px;
+  margin: 0 15px 10px 0;
   .control-header {
     display: flex;
     .btn-area {
