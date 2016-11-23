@@ -19,6 +19,9 @@ class ImageTranslateContainer extends React.Component {
     render() {
         return (
             <div class="container">
+                <a class="newgallary">
+                    <span>点此创建新影集</span>
+                </a>
                 <ImageTranslate imageSources={images}/>
                 <ImageTranslate photoAddingAllowed />
             </div>

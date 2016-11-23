@@ -10,8 +10,8 @@ import './image-translate.scss';
 class ImageTranslate extends React.Component {
   constructor(props) {
     super(props);
-      this.sources = !(props.imageSources && props.imageSources.length) ? [] : [...props.imageSources];
-      let imageGroup = this._generateImageGroup(this.sources);
+    this.sources = !(props.imageSources && props.imageSources.length) ? [] : [...props.imageSources];
+    let imageGroup = this._generateImageGroup(this.sources);
     this.state = {
       images: imageGroup,
       playing: true
@@ -19,7 +19,7 @@ class ImageTranslate extends React.Component {
   }
 
   _generateImageGroup(sources) {
-      if (!(sources && sources.length)) return [];
+    if (!(sources && sources.length)) return [];
     let count = sources.length;
     return sources.map((src, index) => {
       let imageClass = (index != count - 1) ? 'hidden' : '';
@@ -45,7 +45,7 @@ class ImageTranslate extends React.Component {
   }
 
   _switchPhoto() {
-      let sources = this.sources;
+    let sources = this.sources;
 
     if (!(sources && sources.length)) return;
     let newImageGroup = this._generateImageGroup(sources),
@@ -87,18 +87,29 @@ class ImageTranslate extends React.Component {
   };
 
   render() {
-    return (
-        <div class="image-slider">
-          {
-              this.props.photoAddingAllowed ?
-                  <FileInput onChange={(files) => {this.handleFileAdded(files)}} /> : null
-          }
-          <SpaceHolder height="2px"/>
+    let imageSelector = null, controlButton = null;
+    if (this.props.photoAddingAllowed) {
+      imageSelector = (
+          <div>
+            <FileInput onChange={(files) => {this.handleFileAdded(files)}} />
+            <SpaceHolder height="2px" />
+          </div>
+      );
+    }
+    if (this.state.images.length) {
+      controlButton = (
           <div class="btn-area">
             <Button onClick={this.handleButtonClick}>
               {this.state.playing ? '暂停' : '播放'}
             </Button>
           </div>
+      );
+    }
+
+    return (
+        <div class="image-slider">
+          {imageSelector}
+          {controlButton}
           <div class="image-container">
             {this.state.images}
           </div>
