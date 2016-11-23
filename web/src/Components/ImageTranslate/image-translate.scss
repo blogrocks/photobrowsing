@@ -6,6 +6,8 @@ $show-debug-border: false;
   @include debug-border(blue);
   width: 60%;
   margin: 0 auto;
+  background: #f1e5e6;
+  min-height: 200px;
 }
 .image-container {
   @include debug-border;

@@ -99,7 +99,7 @@ class ImageTranslate extends React.Component {
           </div>
       );
     }
-    if (this.state.images.length) {
+    if (this.state.images.length >= 2) {
       controlButton = (
           <div class="btn-area">
             <Button onClick={this.handleButtonClick}>
