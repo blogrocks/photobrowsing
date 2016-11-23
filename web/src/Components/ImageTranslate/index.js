@@ -17,28 +17,26 @@ let images = [];
 class ImageTranslate extends React.Component {
   constructor(props) {
     super(props);
+      this.sources = !(props.imageSources && props.imageSources.length) ? [] : [...props.imageSources];
+      let imageGroup = this._generateImageGroup(this.sources);
     this.state = {
-      data: [],
+      images: imageGroup,
       playing: true
     };
   }
 
-  _generateImageGroup() {
-    let imageNumber = images.length;
-    return images.map((image, index) => {
-      let imageClass = (index != imageNumber - 1) ? 'hidden' : '';
+  _generateImageGroup(sources) {
+      if (!(sources && sources.length)) return [];
+    let count = sources.length;
+    return sources.map((src, index) => {
+      let imageClass = (index != count - 1) ? 'hidden' : '';
 
-      return <img src={image} key={image} class={imageClass} />;
+      return <img src={src} key={src} class={imageClass} />;
     });
   }
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({     // 将 setState 放在 setTimeout 里，确保其同步性。
-        data: this._generateImageGroup()
-      });
       this.scheduleAnimating();
-    }, 0);
   }
 
   componentWillUnmount() {
@@ -54,23 +52,25 @@ class ImageTranslate extends React.Component {
   }
 
   _switchPhoto() {
-    if (!(images && images.length)) return;
-    let newImageGroup = this._generateImageGroup(),
-        lastImage = images[images.length - 1],
-        secondToLastImage = images[images.length - 2];
+      let sources = this.sources;
+
+    if (!(sources && sources.length)) return;
+    let newImageGroup = this._generateImageGroup(sources),
+        lastImageSrc = sources[sources.length - 1],
+        secondToLastImageSrc = sources[sources.length - 2];
 
     this.setState({
-      data: newImageGroup
+      images: newImageGroup
     });
     setTimeout(() => { // 停留2s，图片观看时间
       newImageGroup.pop();
       newImageGroup.pop();
-      newImageGroup.push(<img src={secondToLastImage} key={secondToLastImage} />);
-      newImageGroup.push(<img src={lastImage} key={lastImage} class="hidden" />);
+      newImageGroup.push(<img src={secondToLastImageSrc} key={secondToLastImageSrc} />);
+      newImageGroup.push(<img src={lastImageSrc} key={lastImageSrc} class="hidden" />);
       this.setState({
-        data: newImageGroup
+        images: newImageGroup
       });
-      images.unshift(images.pop());
+      sources.unshift(sources.pop());
     }, 2000);
   }
 
@@ -86,9 +86,10 @@ class ImageTranslate extends React.Component {
   };
 
   handleFileAdded = (files) => {
+      alert(this.props.hello);
     if (files) {
       files.forEach((file) => {
-        images.unshift(window.URL.createObjectURL(file));
+        this.sources.unshift(window.URL.createObjectURL(file));
       });
     }
   };
@@ -103,7 +104,7 @@ class ImageTranslate extends React.Component {
           </div>
           <FileInput onChange={(files) => {this.handleFileAdded(files)}} />
           <div class="image-container">
-            {this.state.data}
+            {this.state.images}
           </div>
         </div>
     );

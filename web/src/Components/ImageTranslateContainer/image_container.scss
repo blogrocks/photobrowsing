@@ -1,0 +1,7 @@
+@import 'compass/reset';
+@import 'debug.scss';
+
+$show-debug-border: true;
+.container {
+  @include debug-border;
+}
