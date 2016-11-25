@@ -6,7 +6,7 @@ $show-debug-border: false;
   @include debug-border(blue);
   background: #f7f9fc;
   width: 400px;
-  min-height: 200px;
+  min-height: 450px;
   margin: 0 15px 10px 0;
   .control-header {
     display: flex;
@@ -18,7 +18,7 @@ $show-debug-border: false;
 .image-container {
   @include debug-border;
   width: 100%;
-  margin: 10px auto 30px;
+  margin: 10px auto 0px;
   position: relative;
   img {
     width: 100%;

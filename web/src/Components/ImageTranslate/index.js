@@ -5,6 +5,7 @@ import React from 'react';
 import Button from 'Components/Button';
 import FileInput from 'Components/FileInput';
 import SpaceHolder from 'Components/SpaceHolder';
+import $ from 'jquery';
 import './image-translate.scss';
 
 class ImageTranslate extends React.Component {
@@ -53,6 +54,12 @@ class ImageTranslate extends React.Component {
     this.setState({
       images: newImageGroup
     });
+
+    let sliderHeight = $(this.slider).height();
+    if (!this.minHeight || this.minHeight < sliderHeight) {
+      this.minHeight = sliderHeight;
+      $(this.slider).css("min-height", this.minHeight);
+    }
 
     if (sources.length < 2) return; // 一张图片，无需切换
 
@@ -110,7 +117,7 @@ class ImageTranslate extends React.Component {
     }
 
     return (
-        <div class="image-slider">
+        <div class="image-slider" ref={(slider)=>{this.slider=slider}}>
           <div class="control-header">
             {imageSelector}
             {controlButton}
