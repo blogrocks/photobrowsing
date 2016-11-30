@@ -4,7 +4,7 @@
 $show-debug-border: false;
 .container {
   @include debug-border;
-  $bgColor: #586d8e;
+  $bgColor: #586dfe;
   .newgallary {
     height: 60px;
     background-color: $bgColor;

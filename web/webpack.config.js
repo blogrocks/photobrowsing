@@ -112,11 +112,11 @@ module.exports = {
             {
                 test: [/\.js$/, /\.es6$/],
                 exclude: /node_modules/,
-                loaders: ['react-hot-loader/webpack', 'babel-loader']
+                loaders: ['react-hot', 'babel-loader']
             },
             {
                 test: /\.less$/,
-                loader: "style!css?sourceMap!postcss-loader!less?outputStyle=expanded&sourceMap=true&sourceMapContents=true"
+                loader: "style!css!less"
             },
             {
                 test: /\.html/,
