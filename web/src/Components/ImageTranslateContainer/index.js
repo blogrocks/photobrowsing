@@ -16,14 +16,16 @@ class ImageTranslateContainer extends React.Component {
         super(props);
         this.state = {
             galleries: [
-                <ImageTranslate imageSources={images} key="initial"/>
+                <ImageTranslate photoAddingAllowed={false}
+                                imageSources={images}
+                                key="initial"/>
             ]
         };
     }
 
     createGallery() {
         let galleries = [...this.state.galleries];
-        galleries.push(<ImageTranslate photoAddingAllowed key={galleries.length} />);
+        galleries.push(<ImageTranslate key={galleries.length} />);
         this.setState({galleries});
     }
 

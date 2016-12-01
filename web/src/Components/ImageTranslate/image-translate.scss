@@ -2,13 +2,13 @@
 
 $show-debug-border: false;
 
-.image-slider {
+.gallery {
   @include debug-border(blue);
   background: #f7f9fc;
   width: 400px;
   min-height: 450px;
   margin: 0 15px 10px 0;
-  .control-header {
+  .control-section {
     display: flex;
     .btn-area {
       flex: 1
@@ -32,7 +32,7 @@ $show-debug-border: false;
     }
   }
   img.hidden {
-    opacity: 0;
+    opacity: 0; // 如果将opacity换为用其他属性实现，记得修改ImageTranslate中的注释
   }
 }
 
