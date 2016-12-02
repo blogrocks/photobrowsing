@@ -35,7 +35,7 @@ class ImageTranslate extends React.Component {
   }
 
   componentDidMount() {
-      this.scheduleAnimating(); // 开始图片切换动画
+    this.scheduleAnimating(); // 开始图片切换动画
   }
 
   componentWillUnmount() {
@@ -50,7 +50,7 @@ class ImageTranslate extends React.Component {
       setTimeout(() => {
         this._switchPhoto();
       }, 2000); // 停留 2s，图片观看时间，然后切换图片
-    }
+    };
 
     aboutToSwitch();
 
@@ -122,6 +122,7 @@ class ImageTranslate extends React.Component {
         this.imageGroup.unshift(image);
       });
 
+      // 如果之前影集没有图片，则显示图片并开始动画
       if (!this.timer) {
         this.setState({
           image: this.imageGroup[this.imageGroup.length - 1]
