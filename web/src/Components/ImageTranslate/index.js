@@ -5,6 +5,7 @@ import React from 'react';
 import Button from 'Components/Button';
 import FileInput from 'Components/FileInput';
 import SpaceHolder from 'Components/SpaceHolder';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import $ from 'jquery';
 import './image-translate.scss';
 
@@ -12,22 +13,24 @@ class ImageTranslate extends React.Component {
   constructor(props) {
     super(props);
 
-    this.sources = props.imageSources; // PropTypes定义了sources为数组，缺省值为 []
-    let imageGroup = this._generateImageGroup(this.sources); // 生成 img 对象数组
+    // PropTypes定义了sources为数组，缺省值为 []
+    this.sources = props.imageSources;
+
+    // 生成 img 对象数组
+    this.imageGroup = this._generateImageGroup(this.sources);
 
     this.state = {
-      images: imageGroup,
+      // 显示最后一张图片
+      image: this.imageGroup[this.imageGroup.length - 1],
       playing: true
     };
   }
 
   _generateImageGroup(sources) {
-    if (!(sources && sources.length)) return []; // 确保sources是有值数组
-    let num = sources.length;
+    // 确保sources是有值数组
+    if (!(sources && sources.length)) return [];
     return sources.map((src, index) => {
-      let imageClass = (index != num - 1) ? 'hidden' : ''; // 数组最后一个图片(最顶上的)显示，其他隐藏(opacity 为 0)
-
-      return <img src={src} key={src} class={imageClass} />;
+      return <img src={src} key={src} />;
     });
   }
 
@@ -40,7 +43,8 @@ class ImageTranslate extends React.Component {
   }
 
   scheduleAnimating(interval = 4000) {
-    if (interval < 4000) interval = 4000; // 图片切换的时间间隔不小于4s(图片观看时间 + 图片切换动画时间)
+    // 图片切换的时间间隔不小于4s(图片观看时间 + 图片切换动画时间)
+    if (interval < 4000) interval = 4000;
 
     let aboutToSwitch = () => {
       setTimeout(() => {
@@ -56,31 +60,27 @@ class ImageTranslate extends React.Component {
   }
 
   _switchPhoto() {
-    let sources = this.sources; // 当前最新的图片源
+    // 当前最新的图片组
+    let imageGroup = this.imageGroup;
 
-    if (!(sources && sources.length)) return; // 无图片
-    let newImageGroup = this._generateImageGroup(sources);
+    // 无图片或一张图片
+    if (!(imageGroup
+          && imageGroup.length
+          && imageGroup.length >= 2)) {
+      clearInterval(this.timer);
+      this.timer = null;
+      return;
+    }
+
+    // 设置 gallery 最小高度
+    this.setGalleryMinHeight();
+
+    // 最后一张移到第一张
+    imageGroup.unshift(imageGroup.pop());
 
     this.setState({
-      images: newImageGroup
+      image: imageGroup[imageGroup.length - 1]
     });
-
-    this.setGalleryMinHeight(); // 设置 gallery 最小高度
-
-    if (sources.length < 2) return; // 一张图片，无需切换
-
-    let lastImageSrc = sources[sources.length - 1],
-        secondToLastImageSrc = sources[sources.length - 2];
-    newImageGroup.pop(); // 弹出最后一张
-    newImageGroup.pop(); // 弹出倒数第二张
-    newImageGroup.push(<img src={secondToLastImageSrc} key={secondToLastImageSrc} />); // 显示原先的倒数第二张图片
-    newImageGroup.push(<img src={lastImageSrc} key={lastImageSrc} class="hidden" />);  // 隐藏原先的最后一张图片
-
-    // 此时 setState 触发的重新渲染，将改变图片的 css 类，触发切换动画
-    this.setState({
-      images: newImageGroup
-    });
-    sources.unshift(sources.pop()); // 将底层 sources 的最后一个图片源移动为第一个。
   }
 
   /**
@@ -89,7 +89,6 @@ class ImageTranslate extends React.Component {
    * 的高度为所有图片高度的最大值。
    */
   setGalleryMinHeight() {
-    // 若未设gallery高度，其高度等于数组第一个元素的高度，因为最下面的图片定位为relative，其余为absolute
     let sliderHeight = $(this.gallery).height();
 
     if (!this.minHeight || this.minHeight < sliderHeight) { // 当我们发现某张图片的高度比当前 gallery 的最小高度大时
@@ -118,9 +117,17 @@ class ImageTranslate extends React.Component {
   handleFileAdded = (files) => {
     if (files) {
       files.forEach((file) => {
-        // 将图片添加到源数组的开头，即作为当前最下面的图片
-        this.sources.unshift(window.URL.createObjectURL(file));
+        let src = window.URL.createObjectURL(file);
+        let image = <img src={src} key={src} />;
+        this.imageGroup.unshift(image);
       });
+
+      if (!this.timer) {
+        this.setState({
+          image: this.imageGroup[this.imageGroup.length - 1]
+        });
+        this.scheduleAnimating();
+      }
     }
   };
 
@@ -134,7 +141,9 @@ class ImageTranslate extends React.Component {
           </div>
       );
     }
-    if (this.state.images.length >= 2) { // 只有一张图片时不播放，无需控制按钮
+
+    // 只有一张图片时不播放，无需控制按钮
+    if (this.imageGroup.length >= 2) {
       controlButton = (
           <div class="btn-area">
             <Button onClick={this.handleButtonClick}>
@@ -151,7 +160,12 @@ class ImageTranslate extends React.Component {
             {controlButton}
           </div>
           <div class="image-container">
-            {this.state.images}
+            <ReactCSSTransitionGroup
+              transitionName="photo"
+              transitionEnterTimeout={2000}
+              transitionLeaveTimeout={2000}>
+              {this.state.image}
+            </ReactCSSTransitionGroup>
           </div>
         </div>
     );

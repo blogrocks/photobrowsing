@@ -50,8 +50,10 @@
     "jquery": "^3.1.1",
     "mustache": "^2.2.1",
     "normalize-scss": "^6.0.0",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.4.1",
+    "react-addons-css-transition-group": "^15.4.1",
+    "react-addons-transition-group": "^15.4.1",
+    "react-dom": "^15.4.1",
     "remarkable": "^1.7.1"
   }
 }

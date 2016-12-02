@@ -16,23 +16,27 @@ $show-debug-border: false;
   }
 }
 .image-container {
-  @include debug-border;
+  @include debug-border(red);
   width: 100%;
   margin: 10px auto 0px;
   position: relative;
   img {
     width: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    transition-duration: 2s;
-    transition-property: left, top, opacity;
-    &:first-of-type {
-      position: static;
-    }
   }
-  img.hidden {
-    opacity: 0; // 如果将opacity换为用其他属性实现，记得修改ImageTranslate中的注释
+  .photo-enter {
+    position: absolute;
+    opacity: 0.01;
+  }
+  .photo-enter.photo-enter-active {
+    opacity: 1;
+    transition: opacity 2s;
+  }
+  .photo-leave {
+    opacity: 1;
+  }
+  .photo-leave.photo-leave-active {
+    opacity: 0.01;
+    transition: opacity 2s;
   }
 }
 
