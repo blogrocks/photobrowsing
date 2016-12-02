@@ -133,12 +133,20 @@ class ImageTranslate extends React.Component {
   };
 
   render() {
-    let imageSelector = null, controlButton = null;
-    if (this.props.photoAddingAllowed) {
+    let imageSelector = null,
+        controlButton = null,
+        deleteButton = null;
+
+    if (this.props.allowEditting) {
       imageSelector = (
-          <div>
+          <div style={{marginRight: '10px'}}>
             <FileInput onChange={(files) => {this.handleFileAdded(files)}} />
             <SpaceHolder height="2px" />
+          </div>
+      );
+      deleteButton = (
+          <div class="cross-out" onClick={() => this.props.onDelete(this)}>
+            <span>X</span>
           </div>
       );
     }
@@ -159,6 +167,7 @@ class ImageTranslate extends React.Component {
           <div class="control-section">
             {imageSelector}
             {controlButton}
+            {deleteButton}
           </div>
           <div class="image-container">
             <ReactCSSTransitionGroup
@@ -174,12 +183,12 @@ class ImageTranslate extends React.Component {
 }
 
 ImageTranslate.propTypes = {
-  photoAddingAllowed: React.PropTypes.bool,
+  allowEditting: React.PropTypes.bool,
   imageSources: React.PropTypes.array
 };
 
 ImageTranslate.defaultProps = {
-  photoAddingAllowed: true,
+  allowEditting: true,
   imageSources: []
 };
 

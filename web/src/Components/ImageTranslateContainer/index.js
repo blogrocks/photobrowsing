@@ -6,26 +6,29 @@ import ImageTranslate from 'Components/ImageTranslate';
 import image1 from './images/boy1.jpg';
 import image2 from './images/boy2.jpg';
 import image3 from './images/boy3.jpg';
-import image4 from './images/boy4.jpg';
 
 import './image_container.scss';
-
 var images = [image1, image2, image3];
 class ImageTranslateContainer extends React.Component {
     constructor(props) {
         super(props);
+        this.id = 0;
         this.state = {
             galleries: [
-                <ImageTranslate photoAddingAllowed={false}
+                <ImageTranslate allowEditting={false}
                                 imageSources={images}
-                                key="initial"/>
+                                key={this.id} />
             ]
         };
     }
 
     createGallery() {
         let galleries = [...this.state.galleries];
-        galleries.push(<ImageTranslate key={galleries.length} ref={(gallery) => this.gallery=gallery} />);
+        let id = ++this.id;
+        galleries.push(<ImageTranslate key={id}
+                                       id={id}
+                                       ref={(gallery) => {this.imageGallery=gallery;}}
+                                       onDelete={(id) => this.handleCrossOut(id)} />);
         this.setState({galleries});
     }
 
@@ -50,10 +53,25 @@ class ImageTranslateContainer extends React.Component {
         }
         return rows;
     }
+
+    handleCrossOut(id) {
+        let galleries = [...this.state.galleries];
+        let newGalleries = galleries.filter((gallery, index) => {
+            if (gallery !== id) {
+                return true;
+            }
+        });
+        this.setState({
+            galleries: newGalleries
+        });
+    }
+
     componentDidUpdate() {
-        if (this.gallery) {
-            console.log(this.gallery.gallery);
-            this.gallery.gallery.scrollIntoView();
+        if (this.imageGallery && this.imageGallery.gallery) {
+            this.imageGallery.gallery.scrollIntoView();
+
+            // 只有创建 gallery 时 this.imageGallery 才有值
+            this.imageGallery = null;
         }
     }
     render() {
