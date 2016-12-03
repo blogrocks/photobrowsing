@@ -32,32 +32,11 @@ class ImageTranslateContainer extends React.Component {
         this.setState({galleries});
     }
 
-    calcRows(galleries) {
-        let rows = [];
-
-        for(let i = 0; i < galleries.length; i += 2) {
-            if ((i + 1) < galleries.length) {
-                rows.push(
-                    <div class="galleryContainer" key={i}>
-                        {galleries[i]}
-                        {galleries[i+1]}
-                    </div>
-                );
-            } else {
-                rows.push(
-                    <div class="galleryContainer" key={i}>
-                        {galleries[i]}
-                    </div>
-                );
-            }
-        }
-        return rows;
-    }
-
     handleCrossOut(id) {
+        debugger;
         let galleries = [...this.state.galleries];
         let newGalleries = galleries.filter((gallery, index) => {
-            if (gallery !== id) {
+            if (gallery.props.id !== id) {
                 return true;
             }
         });
@@ -80,7 +59,9 @@ class ImageTranslateContainer extends React.Component {
                 <a class="newgallary" onClick={() => this.createGallery()}>
                     <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>
-                {this.calcRows(this.state.galleries)}
+                <div class="gallery-container">
+                    {this.state.galleries}
+                </div>
             </div>
         );
     }

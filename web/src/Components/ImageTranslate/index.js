@@ -93,7 +93,9 @@ class ImageTranslate extends React.Component {
 
     if (!this.minHeight || this.minHeight < sliderHeight) { // 当我们发现某张图片的高度比当前 gallery 的最小高度大时
       this.minHeight = sliderHeight;                        // 保存此时的最小高度
-      $(this.gallery).css("min-height", this.minHeight);    // 更新 gallery 的最小高度
+      if (this.props.allowEditting) {                       // 不设置demo 的最小高度
+        $(this.gallery).css("min-height", this.minHeight);  // 更新 gallery 的最小高度
+      }
     }
   }
 
@@ -132,6 +134,10 @@ class ImageTranslate extends React.Component {
     }
   };
 
+  onDeleteGallery() {
+    this.props.onDelete(this.props.id);
+  }
+
   render() {
     let imageSelector = null,
         controlButton = null,
@@ -145,7 +151,7 @@ class ImageTranslate extends React.Component {
           </div>
       );
       deleteButton = (
-          <div class="cross-out" onClick={() => this.props.onDelete(this)}>
+          <div class="cross-out" onClick={() => this.onDeleteGallery()}>
             <span>X</span>
           </div>
       );
