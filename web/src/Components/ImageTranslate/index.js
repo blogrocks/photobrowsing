@@ -119,18 +119,30 @@ class ImageTranslate extends React.Component {
   handleFileAdded = (files) => {
     if (files) {
       files.forEach((file) => {
-        let src = window.URL.createObjectURL(file);
-        let image = <img src={src} key={src} />;
-        this.imageGroup.unshift(image);
+        let src;
+        let _this = this;
+        let reader = new FileReader();
+        reader.onload = (function() {
+          return function(e) {
+            src = e.target.result;
+            let image = <img src={src} key={src} />;
+            _this.imageGroup.unshift(image);
+
+            // 如果之前影集没有图片，则显示图片并开始动画
+            if (!_this.timer) {
+              _this.setState({
+                image: _this.imageGroup[_this.imageGroup.length - 1]
+              });
+              _this.scheduleAnimating();
+            }
+          };
+        }());
+        reader.readAsDataURL(file);
+        // let src = window.URL.createObjectURL(file);
+
       });
 
-      // 如果之前影集没有图片，则显示图片并开始动画
-      if (!this.timer) {
-        this.setState({
-          image: this.imageGroup[this.imageGroup.length - 1]
-        });
-        this.scheduleAnimating();
-      }
+
     }
   };
 
