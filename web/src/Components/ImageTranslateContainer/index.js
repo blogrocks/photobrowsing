@@ -6,7 +6,7 @@ import ImageTranslate from 'Components/ImageTranslate';
 import image1 from './images/boy1.jpg';
 import image2 from './images/boy2.jpg';
 import image3 from './images/boy3.jpg';
-
+import DBHelper from '../../indexedDB';
 import './image_container.scss';
 var images = [image1, image2, image3];
 class ImageTranslateContainer extends React.Component {
@@ -23,17 +23,31 @@ class ImageTranslateContainer extends React.Component {
     }
 
     createGallery() {
-        let galleries = [...this.state.galleries];
-        let id = ++this.id;
-        galleries.push(<ImageTranslate key={id}
-                                       id={id}
-                                       ref={(gallery) => {this.imageGallery=gallery;}}
-                                       onDelete={(id) => this.handleCrossOut(id)} />);
-        this.setState({galleries});
+        new DBHelper('ImageGallery', 'gallery').then(
+            (db) => {
+              db.getObjectCount().then(
+                  (count) => {
+                    alert(count);
+                  },
+                  (error) => {
+                    alert(error)
+                  }
+              );
+            },
+            (error) => {
+              alert(error);
+            }
+        );
+        // let galleries = [...this.state.galleries];
+        // let id = ++this.id;
+        // galleries.push(<ImageTranslate key={id}
+        //                                id={id}
+        //                                ref={(gallery) => {this.imageGallery=gallery;}}
+        //                                onDelete={(id) => this.handleCrossOut(id)} />);
+        // this.setState({galleries});
     }
 
     handleCrossOut(id) {
-        debugger;
         let galleries = [...this.state.galleries];
         let newGalleries = galleries.filter((gallery, index) => {
             if (gallery.props.id !== id) {
@@ -49,7 +63,7 @@ class ImageTranslateContainer extends React.Component {
         if (this.imageGallery && this.imageGallery.gallery) {
             this.imageGallery.gallery.scrollIntoView();
 
-            // 只有创建 gallery 时 this.imageGallery 才有值
+            // 确保只有创建 gallery 时 this.imageGallery 才有值
             this.imageGallery = null;
         }
     }
