@@ -23,21 +23,29 @@ class ImageTranslateContainer extends React.Component {
     }
 
     createGallery() {
-        new DBHelper('ImageGallery', 'gallery').then(
-            (db) => {
-              db.getObjectCount().then(
-                  (count) => {
-                    alert(count);
-                  },
-                  (error) => {
-                    alert(error)
-                  }
-              );
+        DBHelper.databaseExists('ImageGallery').then(
+            (exists) => {
+              alert("Exists: " + exists);
             },
             (error) => {
               alert(error);
             }
         );
+        // new DBHelper('ImageGallery', 'gallery').then(
+        //     (helper) => {
+        //       helper.getObjectCount().then(
+        //           (count) => {
+        //             alert(count);
+        //           },
+        //           (error) => {
+        //             alert(error)
+        //           }
+        //       );
+        //     },
+        //     (error) => {
+        //       alert(error);
+        //     }
+        // );
         // let galleries = [...this.state.galleries];
         // let id = ++this.id;
         // galleries.push(<ImageTranslate key={id}
@@ -73,6 +81,23 @@ class ImageTranslateContainer extends React.Component {
                 <a class="newgallary" onClick={() => this.createGallery()}>
                     <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>
+                <button onClick={() => {
+                  new DBHelper('ImageGallery', 'gallery').then(
+                      (helper) => {
+                        helper.deleteDatabase("ImageGallery").then(
+                            (result) => {
+                              alert(result);
+                            },
+                            (result) => {
+                              alert(result);
+                            }
+                        )
+                      },
+                      (error) => {
+                        alert(error);
+                      }
+                  )
+                }}>Click</button>
                 <div class="gallery-container">
                     {this.state.galleries}
                 </div>
