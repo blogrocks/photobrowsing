@@ -23,29 +23,21 @@ class ImageTranslateContainer extends React.Component {
     }
 
     createGallery() {
-        DBHelper.databaseExists('ImageGallery').then(
-            (exists) => {
-              alert("Exists: " + exists);
+        new DBHelper('ImageGallery', 'gallery').then(
+            (helper) => {
+              helper.getObjectCount().then(
+                  (count) => {
+                    alert(count);
+                  },
+                  (error) => {
+                    alert(error)
+                  }
+              );
             },
             (error) => {
               alert(error);
             }
         );
-        // new DBHelper('ImageGallery', 'gallery').then(
-        //     (helper) => {
-        //       helper.getObjectCount().then(
-        //           (count) => {
-        //             alert(count);
-        //           },
-        //           (error) => {
-        //             alert(error)
-        //           }
-        //       );
-        //     },
-        //     (error) => {
-        //       alert(error);
-        //     }
-        // );
         // let galleries = [...this.state.galleries];
         // let id = ++this.id;
         // galleries.push(<ImageTranslate key={id}

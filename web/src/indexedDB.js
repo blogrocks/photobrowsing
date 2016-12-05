@@ -17,44 +17,42 @@ let v = 0;
 
 export default class DBHelper {
   constructor(dbname, storename) {
-    this.dbname = dbname;
     this.storename = storename;
     return new Promise((resolve, reject) => {
-      if (dbname in DBPOOL) {
-        this.db = DBPOOL[dbname];
-        resolve(this);
-      } else {
-        let request = indexedDB.open(dbname, 2);
-        request.onsuccess = (event) => {
-          let db = event.target.result;
+      let request = indexedDB.open(dbname);
 
-          if (!(dbname in DBPOOL)) {
-            DBPOOL[dbname] = db;
-          }
-          this.db = DBPOOL[dbname];
+      request.onsuccess = (e) => {
+        if (!this.db.objectStoreNames.contains(storename)) {
+          let currentVersion = this.db.version;
+          let newRequest = indexedDB.open(dbname, currentVersion + 1);
+          newRequest.onsuccess = (e) => {
+            resolve(this);
+          };
+          newRequest.onupgradeneeded = (e) => {
+            this._onupgradeneeded(e);
+          };
+          newRequest.onerror = (e) => {
+            reject("opening database error");
+          };
+        } else {
           resolve(this);
-        };
-        request.onerror = (event) => {
-          reject('opening database error');
-        };
-        request.onupgradeneeded = (event) => {
-          this.db = event.target.result;
-          DBPOOL[dbname] = this.db;
+        }
+      };
 
-          this.db.createObjectStore(storename, {keyPath: 'id'});
-        };
-      }
+      request.onupgradeneeded = (e) => {
+        this._onupgradeneeded(e);
+      };
+      request.onerror = (e) => {
+        reject("opening database error");
+      };
     });
   }
 
-  requestConnection(dbname, storename) {
-    this.dbname = dbname;
-    this.storename = storename;
+  _onupgradeneeded = (e) => {
+    this.db = e.target.result;
+    this.db.createObjectStore(this.storename, {keyPath: 'id'});
+  };
 
-    return new Promise((resolve, reject) => {
-      
-    });
-  }
 
   _getObjectStore() {
     if (!this.db) throw new Error("Database is not ready.");
