@@ -23,7 +23,7 @@ class ImageTranslateContainer extends React.Component {
     }
 
     createGallery() {
-        new DBHelper('ImageGallery', 'gallery2').then(
+        new DBHelper('ImageGallery1', 'gallery1').then(
             (helper) => {
               helper.getObjectCount().then(
                   (count) => {

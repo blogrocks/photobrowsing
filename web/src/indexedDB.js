@@ -12,9 +12,6 @@ if (!indexedDB) {
   window.alert("Your browser doesn't support a stable version of IndexedDB.")
 }
 
-const DBPOOL = {};
-let v = 0;
-
 export default class DBHelper {
   constructor(dbname, storename) {
     this.storename = storename;
@@ -22,12 +19,13 @@ export default class DBHelper {
       let request = indexedDB.open(dbname);
 
       request.onsuccess = (e) => {
-        debugger;
         this.db = e.target.result;
         if (!this.db.objectStoreNames.contains(storename)) {
+          this.db.close();
           let currentVersion = this.db.version;
           let newRequest = indexedDB.open(dbname, currentVersion + 1);
           newRequest.onsuccess = (e) => {
+            this.db = e.target.result;
             resolve(this);
           };
           newRequest.onupgradeneeded = (e) => {
@@ -36,6 +34,9 @@ export default class DBHelper {
           newRequest.onerror = (e) => {
             reject("opening database error");
           };
+          newRequest.onblocked = (e) => {
+            alert('blocked');
+          }
         } else {
           resolve(this);
         }
