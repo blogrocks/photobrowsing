@@ -22,6 +22,8 @@ export default class DBHelper {
       let request = indexedDB.open(dbname);
 
       request.onsuccess = (e) => {
+        debugger;
+        this.db = e.target.result;
         if (!this.db.objectStoreNames.contains(storename)) {
           let currentVersion = this.db.version;
           let newRequest = indexedDB.open(dbname, currentVersion + 1);
