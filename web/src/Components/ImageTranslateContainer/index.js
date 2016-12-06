@@ -6,6 +6,7 @@ import ImageTranslate from 'Components/ImageTranslate';
 import image1 from './images/boy1.jpg';
 import image2 from './images/boy2.jpg';
 import image3 from './images/boy3.jpg';
+import DBHelper from '../../indexedDB';
 
 import './image_container.scss';
 var images = [image1, image2, image3];
@@ -33,7 +34,6 @@ class ImageTranslateContainer extends React.Component {
     }
 
     handleCrossOut(id) {
-        debugger;
         let galleries = [...this.state.galleries];
         let newGalleries = galleries.filter((gallery, index) => {
             if (gallery.props.id !== id) {
@@ -45,6 +45,16 @@ class ImageTranslateContainer extends React.Component {
         });
     }
 
+    componentDidMount() {
+        new DBHelper('ImageGallery', 'gallery').then(
+            (helper) => {
+              this.dbHelper = helper;
+            },
+            (error) => {
+              alert(error);
+            }
+        );
+    }
     componentDidUpdate() {
         if (this.imageGallery && this.imageGallery.gallery) {
             this.imageGallery.gallery.scrollIntoView();
@@ -56,6 +66,43 @@ class ImageTranslateContainer extends React.Component {
     render() {
         return (
             <div class="container">
+                <button onClick={() => {
+                  try {
+                    this.dbHelper.addObjects([
+                      {id: 102, name: 'abc'},
+                      {id: 103, name: "小红"}
+                    ])
+                        .then(
+                            (result) => { console.log(result); },
+                            (error) => { console.log(error); }
+                        );
+
+                  } catch (e) {
+                    alert(e);
+                  }
+
+                  try {
+                    this.dbHelper.clearObjectStore()
+                        .then(
+                            (result) => {console.log(result);},
+                            (error) => {console.log(error)}
+                        )
+                  } catch (e) {
+                    alert(e);
+                  }
+                }}>Click</button>
+
+                <button onClick={() => {
+                  try {
+                    this.dbHelper.clearObjectStore()
+                        .then(
+                            (result) => {console.log(result);},
+                            (error) => {console.log(error)}
+                        )
+                  } catch (e) {
+                    alert(e);
+                  }
+                }}>Clear</button>
                 <a class="newgallary" onClick={() => this.createGallery()}>
                     <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>

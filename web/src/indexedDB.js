@@ -110,8 +110,14 @@ export default class DBHelper {
     return new Promise((resolve, reject) => {
       if (arr.length == null) throw new Error("The argument must be an array.");
       arr.forEach((o, i) => {
-        this.addOneObject(o);
+        this.addOneObject(o).then(
+          (result) => {},
+          (error) => {
+            reject(error);
+          }
+        );
       });
+      resolve('All objects are added successfully.');
     });
   }
 
@@ -119,21 +125,42 @@ export default class DBHelper {
     if (!('id' in o)) throw new Error('The object to add must have an id property.');
     let objectStore = this._getObjectStore();
 
-    let request = objectStore.add(o);
-    request.onsuccess = (e) => {
-      resolve('Object with id ' + o.id + ' added successfully');
-    };
-    request.onerror = (e) => {
-      throw new Error("Error adding object with id " + o.id);
-    };
-    request.onblock = (e) => {
-      console.warn('Object with id ' + o.id + ' adding blocked');
-    };
+    return new Promise((resolve, reject) => {
+      let request = objectStore.add(o);
+      request.onsuccess = (e) => {
+        resolve('Object with id ' + o.id + ' added successfully');
+      };
+      request.onerror = (e) => {
+        console.error("Error adding object with id " + o.id);
+        reject("Error adding object with id " + o.id);
+      };
+      request.onblock = (e) => {
+        console.warn('Object with id ' + o.id + ' adding blocked');
+      };
+    });
+  }
+
+  clearObjectStore() {
+    let objectStore = this._getObjectStore();
+
+    return new Promise((resolve, reject) => {
+      let request = objectStore.clear();
+      request.onsuccess = (e) => {
+        resolve('Object store ' + this.storename + ' cleared.');
+      };
+      request.onerror = (e) => {
+        reject("Error clearing object store " + this.storename);
+      };
+      request.onblock = (e) => {
+        console.warn('Clearing object store ' + this.storename + ' blocked');
+      };
+    });
   }
 
   closeConnection() {
     this._db.close();
   }
+
   deleteDatabase() {
     return new Promise((resolve, reject) => {
       // 关闭当前数据库连接。
