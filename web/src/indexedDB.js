@@ -14,28 +14,30 @@ if (!indexedDB) {
 
 export default class DBHelper {
   constructor(dbname, storename) {
+    this.dbname = dbname;
     this.storename = storename;
     return new Promise((resolve, reject) => {
       let request = indexedDB.open(dbname);
 
       request.onsuccess = (e) => {
-        this.db = e.target.result;
-        if (!this.db.objectStoreNames.contains(storename)) {
-          this.db.close();
-          let currentVersion = this.db.version;
+        this._db = e.target.result;
+        if (this.storename &&
+            !this._db.objectStoreNames.contains(storename)) {
+          this._db.close();
+          let currentVersion = this._db.version;
           let newRequest = indexedDB.open(dbname, currentVersion + 1);
           newRequest.onsuccess = (e) => {
-            this.db = e.target.result;
+            this._db = e.target.result;
             resolve(this);
           };
           newRequest.onupgradeneeded = (e) => {
             this._onupgradeneeded(e);
           };
           newRequest.onerror = (e) => {
-            reject("opening database error");
+            reject("Error opening database when constructing DBHelper");
           };
           newRequest.onblocked = (e) => {
-            alert('blocked');
+            console.warn('Opening database blocked when constructing DBHelper');
           }
         } else {
           resolve(this);
@@ -46,31 +48,26 @@ export default class DBHelper {
         this._onupgradeneeded(e);
       };
       request.onerror = (e) => {
-        reject("opening database error");
+        reject("Error opening database when constructing DBHelper");
       };
     });
   }
 
   _onupgradeneeded = (e) => {
-    this.db = e.target.result;
-    this.db.createObjectStore(this.storename, {keyPath: 'id'});
+    this._db = e.target.result;
+    if (!this.storename) return;
+    this._db.createObjectStore(this.storename, {keyPath: 'id'});
   };
 
 
   _getObjectStore() {
-    if (!this.db) throw new Error("Database is not ready.");
+    if (!this._db) throw new Error("Database connection is not ready or has been closed.");
     try {
-      this.db.transaction([this.storename], 'readwrite')
+      return this._db.transaction([this.storename], 'readwrite')
             .objectStore(this.storename);
     } catch (e) {
-      if (8 === e.code) {
-        throw e;
-      } else {
-        throw e;
-      }
+      throw e;
     }
-    return this.db.transaction([this.storename], 'readwrite')
-                  .objectStore(this.storename);
   }
 
   static databaseExists(dbname) {
@@ -90,7 +87,7 @@ export default class DBHelper {
         resolve(false);
       };
       request.onerror = function(e) {
-        reject('opening database error');
+        reject('Error opening database when checking database existence');
       };
     });
   }
@@ -104,22 +101,29 @@ export default class DBHelper {
         resolve(countRequest.result);
       };
       countRequest.onerror = function() {
-        reject('querying object count error');
+        reject('Error querying object count');
       };
     });
   }
 
-  deleteDatabase(dbname) {
+  closeConnection() {
+    this._db.close();
+  }
+  deleteDatabase() {
     return new Promise((resolve, reject) => {
-      let deleteRequest = indexedDB.deleteDatabase(dbname);
+      // 关闭当前数据库连接。
+      this._db.close();
+      let deleteRequest = indexedDB.deleteDatabase(this.dbname);
 
       deleteRequest.onsuccess = (event) => {
-        resolve('database ' + dbname + " deleted");
+        resolve('database ' + this.dbname + " deleted");
       };
       deleteRequest.onerror = (event) => {
-        reject('Failed to delete database: ' + dbname);
+        reject('Failed to delete database: ' + this.dbname);
+      };
+      deleteRequest.onblocked = (e) => {
+        console.warn('database deletion blocked');
       }
     });
-
   }
 }

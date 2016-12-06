@@ -23,11 +23,12 @@ class ImageTranslateContainer extends React.Component {
     }
 
     createGallery() {
-        new DBHelper('ImageGallery1', 'gallery1').then(
+        new DBHelper('ImageGallery', 'gallery').then(
             (helper) => {
               helper.getObjectCount().then(
                   (count) => {
                     alert(count);
+                    this.dbHandler = helper;
                   },
                   (error) => {
                     alert(error)
@@ -74,19 +75,12 @@ class ImageTranslateContainer extends React.Component {
                     <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>
                 <button onClick={() => {
-                  new DBHelper('ImageGallery', 'gallery').then(
-                      (helper) => {
-                        helper.deleteDatabase("ImageGallery").then(
-                            (result) => {
-                              alert(result);
-                            },
-                            (result) => {
-                              alert(result);
-                            }
-                        )
+                  this.dbHandler.deleteDatabase().then(
+                      (result) => {
+                        alert(result);
                       },
-                      (error) => {
-                        alert(error);
+                      (result) => {
+                        alert(result);
                       }
                   )
                 }}>Click</button>
