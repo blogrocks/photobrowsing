@@ -6,7 +6,7 @@ let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedD
 
 //prefixes of window.IDB objects
 window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange
+window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
 if (!indexedDB) {
   window.alert("Your browser doesn't support a stable version of IndexedDB.")
@@ -104,6 +104,31 @@ export default class DBHelper {
         reject('Error querying object count');
       };
     });
+  }
+
+  addObjects(arr) {
+    return new Promise((resolve, reject) => {
+      if (arr.length == null) throw new Error("The argument must be an array.");
+      arr.forEach((o, i) => {
+        this.addOneObject(o);
+      });
+    });
+  }
+
+  addOneObject(o) {
+    if (!('id' in o)) throw new Error('The object to add must have an id property.');
+    let objectStore = this._getObjectStore();
+
+    let request = objectStore.add(o);
+    request.onsuccess = (e) => {
+      resolve('Object with id ' + o.id + ' added successfully');
+    };
+    request.onerror = (e) => {
+      throw new Error("Error adding object with id " + o.id);
+    };
+    request.onblock = (e) => {
+      console.warn('Object with id ' + o.id + ' adding blocked');
+    };
   }
 
   closeConnection() {
