@@ -194,6 +194,112 @@ export default class DBHelper {
     });
   }
 
+  deleteOneObject(id) {
+    let objectStore = this._getObjectStore();
+
+    return new Promise((resolve, reject) => {
+      let deleteRequest = objectStore.delete(id);
+
+      deleteRequest.onsuccess = (e) => {
+        resolve('Object with id ' + id + ' deleted successfully.');
+      };
+      deleteRequest.onerror = (e) => {
+        console.error('Error deleting object with id ' + id);
+        reject('Error deleting object with id ' + id);
+      };
+      deleteRequest.onblocked = (e) => {
+        console.warn('Deleting object with id ' + id + ' blocked.');
+      };
+    });
+  }
+
+  deleteObjects(arrOfIds) {
+    if (arrOfIds.length == null) throw new Error("The argument must be an array.");
+    return new Promise((resolve, reject) => {
+      arrOfIds.forEach((id, i) => {
+        this.deleteOneObject(id).then(
+          (result) => {},
+          (error) => {
+            reject(error);
+          }
+        );
+      });
+      resolve('All objects are deleted successfully');
+    });
+  }
+
+  getOneObject(id) {
+    let objectStore = this._getObjectStore();
+
+    return new Promise((resolve, reject) => {
+      let queryRequest = objectStore.get(id);
+
+      queryRequest.onsuccess = (e) => {
+        if (e.target.result) {
+          resolve(e.target.result);
+        } else {
+          console.error("Couldn't find object with id " + id + " in the object store");
+          resolve(null);
+        }
+      };
+
+      queryRequest.onerror = (e) => {
+        console.error('Error retrieving object with id ' + id);
+        reject('Error retrieving object with id ' + id);
+      };
+
+      queryRequest.onblocked = (e) => {
+        console.warn('Retrieving object with id ' + id + ' blocked.');
+      };
+    });
+  }
+
+  getObjects(arrOfIds) {
+    let resArr = [];
+
+    if (arrOfIds && arrOfIds.length == null) throw new Error("The argument must be an array.");
+    if (!arrOfIds) {
+      return new Promise((resolve, reject) => {
+        let objectStore = this._getObjectStore();
+
+        let openCursor = objectStore.openCursor();
+
+        openCursor.onsuccess = (e) => {
+          let cursor = e.target.result;
+
+          if (cursor) {
+            resArr.push(cursor.value);
+            cursor.continue();
+          } else {
+            resolve(resArr);
+          }
+        };
+
+        openCursor.onerror = (e) => {
+          console.error('Error opening cursor');
+          reject('Error opening cursor');
+        };
+
+        openCursor.onblocked = (e) => {
+          console.warn('Opening cursor blocked');
+        };
+      });
+    }
+    return new Promise((resolve, reject) => {
+      arrOfIds.forEach((id, i) => {
+        this.getOneObject(id).then(
+            (result) => {
+              if (result) resArr.push(result);
+            },
+            (error) => {
+              reject(error);
+            }
+        );
+      });
+      resolve(resArr);
+    });
+  }
+
   clearObjectStore() {
     let objectStore = this._getObjectStore();
 

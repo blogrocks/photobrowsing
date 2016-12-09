@@ -119,6 +119,63 @@ class ImageTranslateContainer extends React.Component {
                         alert(e);
                     }
                 }}>Update objects</button>
+
+                <button onClick={() => {
+                    try {
+                        this.dbHelper.deleteOneObject(102)
+                            .then(
+                                (result) => {console.log(result)},
+                                (error) => {console.log(error)}
+                            )
+                    } catch (e) {
+                        alert(e);
+                    }
+                }}>Delete One object</button>
+
+                <button onClick={() => {
+                    try {
+                        this.dbHelper.deleteObjects([102, 103])
+                            .then(
+                                (result) => {console.log(result)},
+                                (error) => {console.log(error)}
+                            )
+                    } catch (e) {
+                        alert(e);
+                    }
+                }}>Delete objects</button>
+
+                <button onClick={() => {
+                    try {
+                        this.dbHelper.getOneObject(102)
+                            .then(
+                                (result) => {
+                                    if (result) {
+                                        alert(result.name);
+                                    }
+                                },
+                                (error) => {console.log(error)}
+                            )
+                    } catch (e) {
+                        alert(e);
+                    }
+                }}>Get One Object</button>
+
+
+                <button onClick={() => {
+                    try {
+                        this.dbHelper.getObjects([102, 103])
+                            .then(
+                                (result) => {
+                                    if (result) {
+                                        console.log(result);
+                                    }
+                                },
+                                (error) => {console.log(error)}
+                            )
+                    } catch (e) {
+                        alert(e);
+                    }
+                }}>Get All Objects</button>
                 <a class="newgallary" onClick={() => this.createGallery()}>
                     <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>
