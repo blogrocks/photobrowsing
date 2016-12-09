@@ -9,7 +9,7 @@ import image3 from './images/boy3.jpg';
 import DBHelper from '../../indexedDB';
 
 import './image_container.scss';
-var images = [];
+var images = [image1, image2, image3];
 class ImageTranslateContainer extends React.Component {
     constructor(props) {
         super(props);
