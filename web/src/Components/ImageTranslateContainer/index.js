@@ -9,7 +9,7 @@ import image3 from './images/boy3.jpg';
 import DBHelper from '../../indexedDB';
 
 import './image_container.scss';
-var images = [image1, image2, image3];
+var images = [];
 class ImageTranslateContainer extends React.Component {
     constructor(props) {
         super(props);
@@ -80,16 +80,6 @@ class ImageTranslateContainer extends React.Component {
                   } catch (e) {
                     alert(e);
                   }
-
-                  try {
-                    this.dbHelper.clearObjectStore()
-                        .then(
-                            (result) => {console.log(result);},
-                            (error) => {console.log(error)}
-                        )
-                  } catch (e) {
-                    alert(e);
-                  }
                 }}>Click</button>
 
                 <button onClick={() => {
@@ -103,6 +93,32 @@ class ImageTranslateContainer extends React.Component {
                     alert(e);
                   }
                 }}>Clear</button>
+
+                <button onClick={() => {
+                    try {
+                        this.dbHelper.updateOneObject({id: 122, name: '柏正权'})
+                            .then(
+                                (result) => {console.log(result)},
+                                (error) => {console.log(error)}
+                            )
+                    } catch (e) {
+                        alert(e);
+                    }
+                }}>
+                    Update
+                </button>
+
+                <button onClick={() => {
+                    try {
+                        this.dbHelper.updateObjects([{id: 102, name: '柏正'}, {id: 133, name: 'hello world'}])
+                            .then(
+                                (result) => {console.log(result)},
+                                (error) => {console.log(error)}
+                            )
+                    } catch (e) {
+                        alert(e);
+                    }
+                }}>Update objects</button>
                 <a class="newgallary" onClick={() => this.createGallery()}>
                     <span><span id="specialFont">点此</span>创建新影集</span>
                 </a>

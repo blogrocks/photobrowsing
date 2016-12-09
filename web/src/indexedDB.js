@@ -92,6 +92,7 @@ export default class DBHelper {
     });
   }
 
+
   getObjectCount() {
     return new Promise((resolve, reject) => {
       let objectStore = this._getObjectStore();
@@ -106,9 +107,62 @@ export default class DBHelper {
     });
   }
 
-  addObjects(arr) {
+  updateOneObject(o) {
+    if (!('id' in o)) throw new Error('The object to add must have an id property.');
+    let objectStore = this._getObjectStore();
+
     return new Promise((resolve, reject) => {
-      if (arr.length == null) throw new Error("The argument must be an array.");
+      let objectUpdate = objectStore.get(o.id);
+
+      objectUpdate.onsuccess = () => {
+        let data = objectUpdate.result;
+
+        if (data) {
+          let updateDataRequest = objectStore.put(o);
+
+          updateDataRequest.onsuccess = () => {
+            resolve('Object with id ' + data.id + ' updated successfully.');
+          };
+          updateDataRequest.onerror = () => {
+            reject('Object with id ' + data.id + ' failed to update.');
+          };
+          updateDataRequest.onblocked = () => {
+            console.warn('Object with id ' + data.id + ' update blocked.');
+          };
+        } else {
+          console.warn('No object with id ' + o.id + ' in object store.');
+          reject('No object with id ' + o.id + ' in object store.')
+        }
+      };
+
+      objectUpdate.onerror = () => {
+        reject('Error retrieving object with id ' + o.id);
+      };
+
+      objectUpdate.onblocked = () => {
+        console.warn('Object with id ' + o.id + ' retrieving blocked.');
+      };
+    });
+  }
+
+  updateObjects(arr) {
+    if (arr.length == null) throw new Error("The argument must be an array.");
+    return new Promise((resolve, reject) => {
+      arr.forEach((o, i) => {
+        this.updateOneObject(o).then(
+          (result) => {},
+          (error) => {
+            reject(error);
+          }
+        );
+      });
+      resolve('All objects are updated successfully.');
+    });
+  }
+
+  addObjects(arr) {
+    if (arr.length == null) throw new Error("The argument must be an array.");
+    return new Promise((resolve, reject) => {
       arr.forEach((o, i) => {
         this.addOneObject(o).then(
           (result) => {},
